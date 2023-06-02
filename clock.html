@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      .clock {
+        font-size: 48px;
+        font-weight: bold;
+        text-align: center;
+      }
+
+    </style>
+    <link rel="stylesheet" href="style.css">
+    <script>
+      function displayTime() {
+        var currentTime = new Date();
+        var hours = currentTime.getHours();
+        var minutes = currentTime.getMinutes();
+        var seconds = currentTime.getSeconds();
+        var meridiem = hours >= 12 ? 'PM' : 'AM';
+
+        // Convert hours from 24-hour to 12-hour format
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+
+        // Add leading zeros to minutes and seconds
+        minutes = padZero(minutes);
+        seconds = padZero(seconds);
+
+        // Display the time
+        var clockDiv = document.getElementById('clock');
+        clockDiv.textContent = hours + ':' + minutes + ':' + seconds + ' ' + meridiem;
+
+        // Update the clock every second
+        setTimeout(displayTime, 1000);
+      }
+
+      function padZero(number) {
+        return (number < 10 ? '0' : '') + number;
+
+      }
+
+      //stop watch time start from here
+      var startTime;
+      var elapsedTime = 0;
+      var timerInterval;
+
+      function startTimer() {
+        startTime = Date.now() - elapsedTime;
+        timerInterval = setInterval(updateTimer, 10);
+      }
+
+      function stopTimer() {
+        clearInterval(timerInterval);
+      }
+
+      function resetTimer() {
+        clearInterval(timerInterval);
+        elapsedTime = 0;
+        updateTimer();
+
+        var stopwatchDiv = document.getElementById('stopwatch');
+        stopwatchDiv.textContent = '00:00.00';
+      }
+
+      function updateTimer() {
+        var currentTime = Date.now();
+        elapsedTime = currentTime - startTime;
+
+        var minutes = Math.floor(elapsedTime / 60000);
+        var seconds = Math.floor((elapsedTime % 60000) / 1000);
+        var milliseconds = Math.floor((elapsedTime % 1000) / 10);
+
+        minutes = padZero(minutes);
+        seconds = padZero(seconds);
+        milliseconds = padZero(milliseconds);
+
+        var stopwatchDiv = document.getElementById('stopwatch');
+        stopwatchDiv.textContent = minutes + ':' + seconds + '.' + milliseconds;
+      }
+
+      function padZero(number) {
+        return (number < 10 ? '0' : '') + number;
+      }
+    </script>
+  </head>
+  <body onload="displayTime()">
+    <h1 style="color: aquamarine; text-align: center; font-weight: 600; text-shadow:5px 5px rgb(59, 82, 91);">DIGITAL CLOCK</h1>
+    <div class="clock" id="clock"></div>
+    
+    <div class="container">
+        <div class="stopwatch" id="stopwatch">00:00.00</div>
+        <div class="buttons">
+          <button onclick="startTimer()">Start</button>
+          <button onclick="stopTimer()">Stop</button>
+          <button onclick="resetTimer()">Reset</button>
+        </div>
+      </div>
+  </body>
+</html>
